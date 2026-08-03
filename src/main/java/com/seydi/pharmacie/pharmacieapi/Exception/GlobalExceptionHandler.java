@@ -32,6 +32,21 @@ public class GlobalExceptionHandler {
         );
     }
 
+    //erreur metier si le prodiut n'existe pas
+    @ExceptionHandler(ProduitNotFoundException.class)
+    public ResponseEntity<ApiError> gererProduitIntrouvable(ProduitNotFoundException ex){
+
+        ApiError erreur = new ApiError(
+                ex.getMessage(),
+                HttpStatus.NOT_FOUND.value(),
+                LocalDateTime.now()
+        );
+
+        return new ResponseEntity<>(
+                erreur,
+                HttpStatus.NOT_FOUND
+        );
+    }
 
     //Erreur de Validation
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -64,6 +79,22 @@ public class GlobalExceptionHandler {
     //Si l'email est deja utilise
     @ExceptionHandler(EmailAlreadyExistsException.class)
     public ResponseEntity<ApiError> gererEmailDejaExistant(EmailAlreadyExistsException ex) {
+
+        ApiError erreur = new ApiError(
+                ex.getMessage(),
+                HttpStatus.CONFLICT.value(),
+                LocalDateTime.now()
+        );
+
+        return new ResponseEntity<>(
+                erreur,
+                HttpStatus.CONFLICT
+        );
+    }
+
+    // si le nom du produit exist déja
+    @ExceptionHandler(ProduitAlreadyExistsException.class)
+    public ResponseEntity<ApiError> gererNomProduitDejaExistant(ProduitAlreadyExistsException ex){
 
         ApiError erreur = new ApiError(
                 ex.getMessage(),

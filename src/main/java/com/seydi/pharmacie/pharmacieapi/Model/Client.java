@@ -14,25 +14,18 @@ public class Client {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Nom obligatoire")
     private String nom;
 
-    @NotBlank(message = "Email obligatoire")
-    @Email(message = "Email invalide")
     private String email;
 
-    @NotBlank(message = "Mot de passe obligatoire")
     private String motDePasse;
 
-    @NotBlank(message = "Num de telephone obligatoire")
     private String telephone;
 
-    @NotBlank(message = "Adresse obligatoire")
     private String adresse;
 
 
-    public Client() {
-    }
+    public Client() {}
 
     public Client(Long id, String nom, String email, String motDePasse, String telephone, String adresse) {
         this.id = id;

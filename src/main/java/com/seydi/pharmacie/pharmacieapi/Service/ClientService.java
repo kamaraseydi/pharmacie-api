@@ -15,7 +15,6 @@ import java.util.List;
 @Service
 public class ClientService {
 
-    //test git pour voir git diff
 
     private final ClientRepository clientRepository;
     private final ClientMapper clientMapper;
