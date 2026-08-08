@@ -1,9 +1,6 @@
 package com.seydi.pharmacie.pharmacieapi.Model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 
@@ -18,6 +15,8 @@ public class Produit {
     private String description;
     private BigDecimal prix;
 
+    @OneToOne(mappedBy = "produit")
+    private Stock stock;
 
     public Produit(){}
 
@@ -58,6 +57,14 @@ public class Produit {
 
     public void setPrix(BigDecimal prix) {
         this.prix = prix;
+    }
+
+    public Stock getStock() {
+        return stock;
+    }
+
+    public void setStock(Stock stock) {
+        this.stock = stock;
     }
 
     @Override
