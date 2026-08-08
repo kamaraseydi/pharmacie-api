@@ -32,19 +32,20 @@ public class ProduitService {
     public List<ProduitResponse> listerProduits(){
         return produitRepository.findAll() //Récupère tous les produits.
                 .stream() //Fais-les passer dans un flux.
-                .map(produit -> produitMapper.toResponse(produit))  //Transforme chaque client en ClientResponse
+                .map(produit -> produitMapper.toResponse(produit)) //Transforme chaque client en ClientResponse
                 .toList(); //Remets le résultat dans une liste.
     }
 
     //Ajout produit
     public ProduitResponse ajouterProduit(CreateProduitRequest request){
 
-        Produit produit = produitMapper.toEntity(request);
-
         //Vérifier si le nom du produit n'est pas déja utilisé
-        if(produitRepository.existsByNom(produit.getNom())){
+        if(produitRepository.existsByNom(request.getNom())){
             throw new ProduitAlreadyExistsException("Produit déja existant");
         }
+
+        //Transformer le DTO en entité Stock
+        Produit produit = produitMapper.toEntity(request);
 
         //Ajout du produit
         Produit produitSauvegarde = produitRepository.save(produit);

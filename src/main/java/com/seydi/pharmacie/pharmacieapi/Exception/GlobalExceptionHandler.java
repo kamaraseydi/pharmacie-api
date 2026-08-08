@@ -48,6 +48,22 @@ public class GlobalExceptionHandler {
         );
     }
 
+    //Erreur métier si le stock n'éxiste pas
+    @ExceptionHandler(StockNotFoundException.class)
+    public ResponseEntity<ApiError> gererStockIntrouvable(StockNotFoundException ex){
+
+        ApiError erreur = new ApiError(
+                ex.getMessage(),
+                HttpStatus.NOT_FOUND.value(),
+                LocalDateTime.now()
+        );
+
+        return new ResponseEntity<>(
+                erreur,
+                HttpStatus.NOT_FOUND
+        );
+    }
+
     //Erreur de Validation
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ValidationErrorResponse> gererValidation(MethodArgumentNotValidException ex) {
@@ -99,6 +115,22 @@ public class GlobalExceptionHandler {
         ApiError erreur = new ApiError(
                 ex.getMessage(),
                 HttpStatus.CONFLICT.value(),
+                LocalDateTime.now()
+        );
+
+        return new ResponseEntity<>(
+                erreur,
+                HttpStatus.CONFLICT
+        );
+    }
+
+    //Si le stock éxiste déja
+    @ExceptionHandler(StockAlreadyExistsException.class)
+    public ResponseEntity<ApiError> gererStockDejaExistant(StockAlreadyExistsException ex){
+
+        ApiError erreur = new ApiError(
+                ex.getMessage(),
+                HttpStatus.CONTINUE.value(),
                 LocalDateTime.now()
         );
 
