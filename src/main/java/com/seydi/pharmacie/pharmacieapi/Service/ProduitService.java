@@ -1,8 +1,12 @@
 package com.seydi.pharmacie.pharmacieapi.Service;
 
+import com.seydi.pharmacie.pharmacieapi.Exception.FournisseurNotFoundException;
 import com.seydi.pharmacie.pharmacieapi.Exception.ProduitAlreadyExistsException;
+import com.seydi.pharmacie.pharmacieapi.Exception.ProduitHasStockException;
 import com.seydi.pharmacie.pharmacieapi.Exception.ProduitNotFoundException;
+import com.seydi.pharmacie.pharmacieapi.Model.Fournisseur;
 import com.seydi.pharmacie.pharmacieapi.Model.Produit;
+import com.seydi.pharmacie.pharmacieapi.Repository.FournisseurRepository;
 import com.seydi.pharmacie.pharmacieapi.Repository.ProduitRepository;
 import com.seydi.pharmacie.pharmacieapi.dto.request.CreateProduitRequest;
 import com.seydi.pharmacie.pharmacieapi.dto.request.UpdateProduitRequest;
@@ -17,15 +21,22 @@ public class ProduitService {
 
     private final ProduitRepository produitRepository;
     private final ProduitMapper produitMapper;
+    private final FournisseurRepository fournisseurRepository;
 
     private Produit trouverProduitOuLeverException(Long id){
         return produitRepository.findById(id) //chercher le produit
                 .orElseThrow(() -> new ProduitNotFoundException("Produit introuvable")); //sinon lance une exception
     }
 
-    public ProduitService(ProduitRepository produitRepository, ProduitMapper produitMapper) {
+    private Fournisseur trouverFournisseurOuLeverException(Long id){
+        return fournisseurRepository.findById(id)
+                .orElseThrow(() -> new FournisseurNotFoundException("Fournisseur introuvable"));
+    }
+
+    public ProduitService(ProduitRepository produitRepository, ProduitMapper produitMapper, FournisseurRepository fournisseurRepository) {
         this.produitRepository = produitRepository;
         this.produitMapper = produitMapper;
+        this.fournisseurRepository = fournisseurRepository;
     }
 
     //Lister tous les produits
@@ -44,8 +55,17 @@ public class ProduitService {
             throw new ProduitAlreadyExistsException("Produit déja existant");
         }
 
-        //Transformer le DTO en entité Stock
+        //verifier si le fournisseur existe
+        Fournisseur fournisseurExistant = trouverFournisseurOuLeverException(request.getFournisseurId());
+
+        //Transformer le DTO en entité Produit
         Produit produit = produitMapper.toEntity(request);
+
+        //Asoocier le produit au fournisseur
+        produit.setFournisseur(fournisseurExistant);
+
+        //Asoocier le fournisseur au produit
+        fournisseurExistant.getProduits().add(produit);
 
         //Ajout du produit
         Produit produitSauvegarde = produitRepository.save(produit);
@@ -70,6 +90,9 @@ public class ProduitService {
 
         Produit produitExistant = trouverProduitOuLeverException(id);
 
+        // Vérifier que fournisseur existe
+        Fournisseur fournisseurExistant = trouverFournisseurOuLeverException(request.getFournisseurId());
+
         // 2. Vérifier que le nouvel nom, on la changeait et s'il n'est pas déjà utilisé
         // par un autre produit.
 
@@ -78,6 +101,24 @@ public class ProduitService {
                 throw new ProduitAlreadyExistsException("Ce produit éxiste déja");
             }
         }
+
+        //Vérifier si l'ancien fournisseur est different du nouveau
+        //si c'est le cas supprimer l'ancienne liaison(mettre à jour la relation)
+
+        Fournisseur ancienFournisseur = produitExistant.getFournisseur();
+
+        if(!ancienFournisseur.getId().equals(fournisseurExistant.getId())){
+
+            // Retirer le produit de son ancien fournisseur
+            ancienFournisseur.getProduits().remove(produitExistant);
+
+            // Associer le produit au nouveau fournisseur
+            produitExistant.setFournisseur(fournisseurExistant);
+
+            // Ajouter le produit au nouveau fournisseur
+            fournisseurExistant.getProduits().add(produitExistant);
+        }
+
 
         // 3. Mettre à jour l'objet Produit existant
         // avec les nouvelles informations reçues.
@@ -95,10 +136,24 @@ public class ProduitService {
     //Supprimer un produit
     public void supprimerProduit(Long id){
 
-        //Chercher le client ici, je n'ai pas besoin de l'objet client donc pas besoin de le stocker
-        trouverProduitOuLeverException(id);
+        //Chercher le produit ici
+       Produit produitExistant =  trouverProduitOuLeverException(id);
+
+       //vérifier si le stock du produit est vide avant de supprimer
+        if(produitExistant.getStock() != null){
+            throw new ProduitHasStockException("\"Impossible de supprimer ce produit : " +
+                    "un stock lui est encore associé.");
+        }
+
+       //Récupérer le fournisseur associé au produit
+        Fournisseur fournisseurExistant = produitExistant.getFournisseur();
+
+        // Retirer le produit de la liste de son fournisseur
+        //Rompre la relation entre le produit et le fournisseur
+        fournisseurExistant.getProduits().remove(produitExistant);
+        produitExistant.setFournisseur(null);
 
         //Supprimer le produit si trouvé
-        produitRepository.deleteById(id);
+        produitRepository.delete(produitExistant);
     }
 }

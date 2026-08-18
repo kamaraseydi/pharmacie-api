@@ -16,7 +16,7 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // Erreur métier si le clientg n'existe pas
+    // Erreur métier si le client n'existe pas
     @ExceptionHandler(ClientNotFoundException.class)
     public ResponseEntity<ApiError> gererClientIntrouvable(ClientNotFoundException ex) {
 
@@ -32,7 +32,7 @@ public class GlobalExceptionHandler {
         );
     }
 
-    //erreur metier si le prodiut n'existe pas
+    //erreur metier si le produit n'existe pas
     @ExceptionHandler(ProduitNotFoundException.class)
     public ResponseEntity<ApiError> gererProduitIntrouvable(ProduitNotFoundException ex){
 
@@ -51,6 +51,22 @@ public class GlobalExceptionHandler {
     //Erreur métier si le stock n'éxiste pas
     @ExceptionHandler(StockNotFoundException.class)
     public ResponseEntity<ApiError> gererStockIntrouvable(StockNotFoundException ex){
+
+        ApiError erreur = new ApiError(
+                ex.getMessage(),
+                HttpStatus.NOT_FOUND.value(),
+                LocalDateTime.now()
+        );
+
+        return new ResponseEntity<>(
+                erreur,
+                HttpStatus.NOT_FOUND
+        );
+    }
+
+    //Erreur métier si le fournisseur n'éxiste pas
+    @ExceptionHandler(FournisseurNotFoundException.class)
+    public ResponseEntity<ApiError> gererFournisseurIntrouvable(FournisseurNotFoundException ex){
 
         ApiError erreur = new ApiError(
                 ex.getMessage(),
@@ -130,7 +146,55 @@ public class GlobalExceptionHandler {
 
         ApiError erreur = new ApiError(
                 ex.getMessage(),
-                HttpStatus.CONTINUE.value(),
+                HttpStatus.CONFLICT.value(),
+                LocalDateTime.now()
+        );
+
+        return new ResponseEntity<>(
+                erreur,
+                HttpStatus.CONFLICT
+        );
+    }
+
+    //Si le fournisseur éxiste déja
+    @ExceptionHandler(FournisseurAlreadyExistsException.class)
+    public ResponseEntity<ApiError> gererFournisseurDejaExistant(FournisseurAlreadyExistsException ex){
+
+        ApiError erreur =  new ApiError(
+                ex.getMessage(),
+                HttpStatus.CONFLICT.value(),
+                LocalDateTime.now()
+        );
+
+        return new ResponseEntity<>(
+                erreur,
+                HttpStatus.CONFLICT
+        );
+    }
+
+    //si le fournisseur a des produits qui lui sont encore associé
+    @ExceptionHandler(FournisseurHasProductsException.class)
+    public ResponseEntity<ApiError> gererFournisseurAvecProduits(FournisseurHasProductsException ex){
+
+        ApiError erreur = new ApiError(
+                ex.getMessage(),
+                HttpStatus.CONFLICT.value(),
+                LocalDateTime.now()
+        );
+
+        return new ResponseEntity<>(
+                erreur,
+                HttpStatus.CONFLICT
+        );
+    }
+
+    //Erreur métier si le produit possède encore un stock
+    @ExceptionHandler(ProduitHasStockException.class)
+    public ResponseEntity<ApiError> gererProduitAvecStock(ProduitHasStockException ex){
+
+        ApiError erreur = new ApiError(
+                ex.getMessage(),
+                HttpStatus.CONFLICT.value(),
                 LocalDateTime.now()
         );
 

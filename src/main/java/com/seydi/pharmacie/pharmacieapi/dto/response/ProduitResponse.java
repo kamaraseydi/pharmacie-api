@@ -10,14 +10,34 @@ public class ProduitResponse {
     private String nom;
     private String description;
     private BigDecimal prix;
+    private Long fournisseurId;
+    private String nomFournisseur;
 
     public ProduitResponse(){}
 
-    public ProduitResponse(Long id, String nom, String description, BigDecimal prix) {
+    public ProduitResponse(Long id, String nom, String description, BigDecimal prix, Long fournisseurId,String nomFournisseur) {
         this.id = id;
         this.nom = nom;
         this.description = description;
         this.prix = prix;
+        this.fournisseurId  = fournisseurId;
+        this.nomFournisseur = nomFournisseur;
+    }
+
+    public Long getFournisseurId() {
+        return fournisseurId;
+    }
+
+    public void setFournisseurId(Long fournisseurId) {
+        this.fournisseurId = fournisseurId;
+    }
+
+    public String getNomFournisseur() {
+        return nomFournisseur;
+    }
+
+    public void setNomFournisseur(String nomFournisseur) {
+        this.nomFournisseur = nomFournisseur;
     }
 
     public Long getId() {

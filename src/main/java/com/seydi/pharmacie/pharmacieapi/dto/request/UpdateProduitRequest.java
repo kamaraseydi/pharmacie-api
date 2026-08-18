@@ -23,12 +23,24 @@ public class UpdateProduitRequest {
     @DecimalMin(value = "0.01", message = "Le prix doit être supérieur à 0")
     private BigDecimal prix;
 
+    //Pour qu'on puisse changer de fournisseur si nécéssaire
+    @NotNull(message = "Id du fournisseur obligatoire")
+    private Long fournisseurId;
+
     public UpdateProduitRequest(){}
 
     public UpdateProduitRequest(String nom, String description, BigDecimal prix) {
         this.nom = nom;
         this.description = description;
         this.prix = prix;
+    }
+
+    public Long getFournisseurId() {
+        return fournisseurId;
+    }
+
+    public void setFournisseurId(Long fournisseurId) {
+        this.fournisseurId = fournisseurId;
     }
 
     public String getNom() {

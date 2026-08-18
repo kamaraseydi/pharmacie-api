@@ -29,12 +29,10 @@ public class CreateClientRequest {
     private String telephone;
 
     @NotBlank(message = "Adresse obligatoire")
-    @Size(min = 5, message = "Adresse doit contenir au moins 5 caractéres")
+    @Size(min = 4, message = "Adresse doit contenir au moins 4 caractéres")
     private String adresse;
 
-    public CreateClientRequest() {
-
-    }
+    public CreateClientRequest() {}
 
     public CreateClientRequest(String nom, String email, String motDePasse, String telephone, String adresse) {
         this.nom = nom;
