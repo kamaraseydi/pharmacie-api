@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 public class ProduitMapper {
 
     //Ici on met ce qu'on ajoute dans le CreateProduit
+    //ici aussi le fournisseur n'est pas renseigner il sera récupérer dans le service
+
     public Produit toEntity(CreateProduitRequest request){
 
         Produit produit = new Produit();
@@ -30,6 +32,10 @@ public class ProduitMapper {
         response.setNom(produit.getNom());
         response.setDescription(produit.getDescription());
         response.setPrix(produit.getPrix());
+
+        //ici les infos du fournisseur
+        response.setFournisseurId(produit.getFournisseur().getId());
+        response.setNomFournisseur(produit.getFournisseur().getNom());
 
         return response;
     }

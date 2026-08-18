@@ -18,6 +18,11 @@ public class Produit {
     @OneToOne(mappedBy = "produit")
     private Stock stock;
 
+    @ManyToOne //plusieurs produits pour un seul fournisseur
+    @JoinColumn(name = "fournisseur_id", nullable = false) //ceci force a la base de ne pas accepter un produit
+    // sans fournisseur
+    private Fournisseur fournisseur;
+
     public Produit(){}
 
     public Produit(Long id, String nom, String description, BigDecimal prix) {
@@ -65,6 +70,17 @@ public class Produit {
 
     public void setStock(Stock stock) {
         this.stock = stock;
+    }
+
+    //ici le getter et le setter du fournisseur
+
+
+    public Fournisseur getFournisseur() {
+        return fournisseur;
+    }
+
+    public void setFournisseur(Fournisseur fournisseur) {
+        this.fournisseur = fournisseur;
     }
 
     @Override
