@@ -3,6 +3,8 @@ package com.seydi.pharmacie.pharmacieapi.Model;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Produit {
@@ -22,6 +24,9 @@ public class Produit {
     @JoinColumn(name = "fournisseur_id", nullable = false) //ceci force a la base de ne pas accepter un produit
     // sans fournisseur
     private Fournisseur fournisseur;
+
+    @OneToMany(mappedBy = "produit")
+    private List<LigneCommande> ligneCommandes = new ArrayList<>();
 
     public Produit(){}
 
@@ -73,14 +78,20 @@ public class Produit {
     }
 
     //ici le getter et le setter du fournisseur
-
-
     public Fournisseur getFournisseur() {
         return fournisseur;
     }
 
     public void setFournisseur(Fournisseur fournisseur) {
         this.fournisseur = fournisseur;
+    }
+
+    public List<LigneCommande> getLigneCommandes() {
+        return ligneCommandes;
+    }
+
+    public void setLigneCommandes(List<LigneCommande> ligneCommandes) {
+        this.ligneCommandes = ligneCommandes;
     }
 
     @Override

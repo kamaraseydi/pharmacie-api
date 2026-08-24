@@ -1,11 +1,11 @@
 package com.seydi.pharmacie.pharmacieapi.Model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Client {
@@ -24,6 +24,8 @@ public class Client {
 
     private String adresse;
 
+    @OneToMany(mappedBy = "client")
+    private List<Commande> commandes = new ArrayList<>();
 
     public Client() {}
 
@@ -82,6 +84,14 @@ public class Client {
 
     public void setAdresse(String adresse) {
         this.adresse = adresse;
+    }
+
+    public List<Commande> getCommandes() {
+        return commandes;
+    }
+
+    public void setCommandes(List<Commande> commandes) {
+        this.commandes = commandes;
     }
 
     @Override

@@ -80,6 +80,22 @@ public class GlobalExceptionHandler {
         );
     }
 
+    //Erreur métier si la commande n'éxiste pas
+    @ExceptionHandler(CommandeNotFoundException.class)
+    public ResponseEntity<ApiError> gererCommandeIntrouvable(CommandeNotFoundException ex){
+
+        ApiError erreur = new ApiError(
+                ex.getMessage(),
+                HttpStatus.NOT_FOUND.value(),
+                LocalDateTime.now()
+        );
+
+        return new ResponseEntity<>(
+                erreur,
+                HttpStatus.NOT_FOUND
+        );
+    }
+
     //Erreur de Validation
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ValidationErrorResponse> gererValidation(MethodArgumentNotValidException ex) {
@@ -191,6 +207,39 @@ public class GlobalExceptionHandler {
     //Erreur métier si le produit possède encore un stock
     @ExceptionHandler(ProduitHasStockException.class)
     public ResponseEntity<ApiError> gererProduitAvecStock(ProduitHasStockException ex){
+
+        ApiError erreur = new ApiError(
+                ex.getMessage(),
+                HttpStatus.CONFLICT.value(),
+                LocalDateTime.now()
+        );
+
+        return new ResponseEntity<>(
+                erreur,
+                HttpStatus.CONFLICT
+        );
+    }
+
+    //Erreur métier si le stock est insuffisant
+    @ExceptionHandler(StockInsuffisantException.class)
+    public ResponseEntity<ApiError> gererStockInsufffisant(StockInsuffisantException ex){
+
+        ApiError erreur = new ApiError(
+                ex.getMessage(),
+                HttpStatus.CONFLICT.value(),
+                LocalDateTime.now()
+        );
+
+        return new ResponseEntity<>(
+                erreur,
+                HttpStatus.CONFLICT
+        );
+
+    }
+
+    //SI la transistion de statut est incorrect
+    @ExceptionHandler(CommandeTransitionException.class)
+    public ResponseEntity<ApiError> gererCommandeTransitionIncorrect(CommandeTransitionException ex){
 
         ApiError erreur = new ApiError(
                 ex.getMessage(),
