@@ -12,12 +12,14 @@ import com.seydi.pharmacie.pharmacieapi.dto.request.UpdateStatutCommandeRequest;
 import com.seydi.pharmacie.pharmacieapi.dto.response.CommandeResponse;
 import com.seydi.pharmacie.pharmacieapi.mapper.CommandeMapper;
 import com.seydi.pharmacie.pharmacieapi.mapper.LigneCommandeMapper;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class CommandeService {
@@ -30,14 +32,15 @@ public class CommandeService {
     private final CommandeMapper commandeMapper;
     private final LigneCommandeMapper ligneCommandeMapper;
 
-    public CommandeService(CommandeRepository commandeRepository, ClientRepository clientRepository, ProduitRepository produitRepository, StockRepository stockRepository, CommandeMapper commandeMapper, LigneCommandeMapper ligneCommandeMapper) {
+    public CommandeService(CommandeRepository commandeRepository, ClientRepository clientRepository, ProduitRepository produitRepository, StockRepository stockRepository, CommandeMapper commandeMapper, LigneCommandeMapper ligneCommandeMapper){
         this.commandeRepository = commandeRepository;
         this.clientRepository = clientRepository;
         this.produitRepository = produitRepository;
         this.stockRepository = stockRepository;
         this.commandeMapper = commandeMapper;
         this.ligneCommandeMapper = ligneCommandeMapper;
-    }
+    };
+
 
     private Client trouverClientOuLeverException(Long id){
         return clientRepository.findById(id) //Cherche le client.
@@ -54,12 +57,23 @@ public class CommandeService {
                 .orElseThrow(() -> new CommandeNotFoundException("Commande introuvable"));
     }
 
+    private Client trouverClientConnecterOuLeverException(Authentication authentication) {
+
+        //je fait ça parce que l'ID est transformé en String lors de la construction du UserDetails
+        Long clientId = Long.valueOf(authentication.getName());
+
+        return trouverClientOuLeverException(clientId);
+    }
+
     //Ajouter Commande
     @Transactional
-    public CommandeResponse ajouterCommande(CreateCommandeRequest request){
+    public CommandeResponse ajouterCommande(CreateCommandeRequest request,Authentication authentication){
 
-        //Vérifier que le client éxiste
-        Client clientExistant = trouverClientOuLeverException(request.getClientId());
+        //une structure pour mémoriser les stocks verrouillés
+        Map<Long, Stock> stocksVerrouilles = new HashMap<>();
+
+        //Vérifier que le client connecté éxiste
+        Client clientExistant = trouverClientConnecterOuLeverException(authentication);
 
         //Transformer le DTO en entité Commande
         Commande commande = commandeMapper.toEntity(request);
@@ -74,21 +88,45 @@ public class CommandeService {
         commande.setDateCommande(LocalDateTime.now());
         commande.setStatut(StatutCommande.EN_ATTENTE);
 
+        //Pour éviter d'ajouter 2 fois le mm produit
+        Set<Long> produitsDejaAjoutes = new HashSet<>();
+
         //initialiser le prix total à 0
         BigDecimal totalPrix = BigDecimal.ZERO;
 
         //Parcourir chaque ligne de commande
         for(CreateLigneCommandeRequest ligneCommandeRequest : request.getLignes()){
 
+            Long produitId = ligneCommandeRequest.getProduitId();
+
+            //Vérifier si le produit n'a pas déja été ajouté
+            //true → l'élément n'était pas encore présent
+            //false → l'élément était déjà présent
+            if (!produitsDejaAjoutes.add(produitId)) {
+                throw new ProduitDejaDansCommandeException(
+                        "Un même produit ne peut pas apparaître plusieurs fois dans une commande"
+                );
+            }
+
             //Récupérer le produit et vérifier s'il existe
             Produit produitExistant = trouverProduitOuLeverException(ligneCommandeRequest.getProduitId());
 
+            //Récupérer le stock avec verrou pessimiste
+            Optional<Stock> stockVerrous = stockRepository.findByProduitId(ligneCommandeRequest.getProduitId());
+
             //vérifier le stock
-            if(produitExistant.getStock() == null){
+            if(stockVerrous.isEmpty()){
                 throw new StockInsuffisantException("Ce produit ne posséde pas de stock");
             }
 
-            if(produitExistant.getStock().getQuantite() < ligneCommandeRequest.getQuantite()){
+            //récupère le stock verrouillé
+            Stock stock = stockVerrous.get();
+
+            //Enregistrer le stock dans la structure
+            stocksVerrouilles.put(produitId,stock);
+
+            // Vérifier le stock verrouillé
+            if(stock.getQuantite() < ligneCommandeRequest.getQuantite()){
                 throw new StockInsuffisantException("Stock insuffisant");
             }
 
@@ -101,10 +139,10 @@ public class CommandeService {
             //Associer la commande a la ligne commande
             commande.getLigneCommandes().add(ligneCommande);
 
-            //Associer la ligne commande  au produit
+            //Associer la ligne commande au produit
             ligneCommande.setProduit(produitExistant);
 
-            //Associer le produti à la ligne commande
+            //Associer le produit à la ligne commande
             produitExistant.getLigneCommandes().add(ligneCommande);
 
             //Récupérer son prix unitaire
@@ -121,22 +159,19 @@ public class CommandeService {
         // Enregistrer le total dans la commande
         commande.setTotalPrix(totalPrix);
 
-        //Refaire la boucle pour modifier les stock des produits
+        //Refaire la boucle pour modifier les stocks des produits
         for(CreateLigneCommandeRequest ligneCommandeRequest : request.getLignes()){
-            //récupére le produit correspondant
-            Produit produitExistant = trouverProduitOuLeverException(ligneCommandeRequest.getProduitId());
+
+            //récupérer le stock que nous avons déjà verrouillé
+            Stock stock = stocksVerrouilles.get(ligneCommandeRequest.getProduitId());
 
             //récupérer la quantite dans la ligne
             Integer quantiteCommandee = ligneCommandeRequest.getQuantite();
 
-            //récupére son stock
-            Integer stockExistant = produitExistant.getStock().getQuantite();
-
             //Calculer son nouveau quantité
-            produitExistant.getStock().setQuantite(stockExistant - quantiteCommandee);
+            stock.setQuantite(stock.getQuantite() - quantiteCommandee);
 
             //sauvegarder la modification(on peut ne pas le faire car avec @Transactionnal il le fait automatiquement)
-            stockRepository.save(produitExistant.getStock());
         }
 
         //Sauvegarder la commande
@@ -147,42 +182,96 @@ public class CommandeService {
     }
 
     //lister les commandes
-    public List<CommandeResponse> listerCommandes(){
-        return commandeRepository.findAll()
-                .stream()
-                .map(commande -> commandeMapper.toResponse(commande))
-                .toList();
+    public List<CommandeResponse> listerCommandes(Authentication authentication){
+
+        if(estAdmin(authentication)){
+            //Retourner toutes les commandes
+            return commandeRepository.findAll()
+                    .stream()
+                    .map(commande -> commandeMapper.toResponse(commande))
+                    .toList();
+        }else {
+
+            // récupérer uniquement les commandes du client connecté
+            return commandeRepository.findByClientId(Long.valueOf(authentication.getName()))
+                    .stream()
+                    .map(commandeMapper::toResponse)
+                    .toList();
+        }
+
+    }
+
+    //Vérifier si l'utilisateur connecté est un admin
+    private boolean estAdmin(Authentication authentication) {
+        return authentication.getAuthorities().stream()
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority()
+                        .equals("ROLE_ADMIN"));
+    }
+
+    //Vérifier qui aura accés a la commande
+    private void verifierAccesCommande(Commande commande, Authentication authentication) throws AccessDeniedException {
+        if(estAdmin(authentication)){
+            return;
+        }
+
+        if(!commande.getClient().getId().equals(Long.valueOf(authentication.getName()))){
+            throw new AccessDeniedException("Accés refusé");
+        }
+
     }
 
     //chercher une commande par son id
-    public CommandeResponse chercherCommandeParId(Long id){
-        return commandeMapper.toResponse(trouverCommandeOuLeverException(id));
+    public CommandeResponse chercherCommandeParId(Long id,Authentication authentication) throws AccessDeniedException {
+
+            Commande  commande = trouverCommandeOuLeverException(id);
+
+            verifierAccesCommande(commande,authentication);
+
+            return commandeMapper.toResponse(commande);
     }
 
-    //Vérifier si la transition de statut est autorisé
+    // Vérifier si la transition de statut est autorisée
     private void verifierTransitionStatut(StatutCommande ancienStatut, StatutCommande nouveauStatut) {
-        // règles ici
-        //une commande en attente peut etre annule
-        if(ancienStatut == StatutCommande.EN_ATTENTE && nouveauStatut != StatutCommande.CONFIRMEE
-            && nouveauStatut != StatutCommande.ANNULEE
-        ){
-            throw new CommandeTransitionException( "Transition de statut impossible : " + ancienStatut + " → " + nouveauStatut);
-        }
-        //une commande confirme peut aussi etre annule
-        if(ancienStatut == StatutCommande.CONFIRMEE && nouveauStatut != StatutCommande.EN_PREPARATION
-            && nouveauStatut != StatutCommande.ANNULEE){
-            throw new CommandeTransitionException( "Transition de statut impossible : " + ancienStatut + " → " + nouveauStatut);
+
+        // Une commande livrée ou annulée ne peut plus changer de statut
+        if (ancienStatut == StatutCommande.LIVREE || ancienStatut == StatutCommande.ANNULEE) {
+
+            throw new CommandeTransitionException("Impossible de modifier une commande " + ancienStatut);
         }
 
-        //Dés que la commande est en preparation elle ne peut etre annulé
-        if(ancienStatut == StatutCommande.EN_PREPARATION && nouveauStatut != StatutCommande.PRETE){
-            throw new CommandeTransitionException( "Transition de statut impossible : " + ancienStatut + " → " + nouveauStatut);
+        // Une commande en attente peut être confirmée ou annulée
+        if (ancienStatut == StatutCommande.EN_ATTENTE && nouveauStatut != StatutCommande.CONFIRMEE
+                && nouveauStatut != StatutCommande.ANNULEE) {
+
+            throw new CommandeTransitionException("Transition de statut impossible : "
+                    + ancienStatut + " → " + nouveauStatut
+            );
         }
 
-        if(ancienStatut == StatutCommande.PRETE && nouveauStatut != StatutCommande.LIVREE){
-            throw new CommandeTransitionException( "Transition de statut impossible : " + ancienStatut + " → " + nouveauStatut);
+        // Une commande confirmée peut être mise en préparation ou annulée
+        if (ancienStatut == StatutCommande.CONFIRMEE && nouveauStatut != StatutCommande.EN_PREPARATION
+                && nouveauStatut != StatutCommande.ANNULEE) {
+
+            throw new CommandeTransitionException("Transition de statut impossible : "
+                            + ancienStatut + " → " + nouveauStatut
+            );
         }
 
+        // Une commande en préparation peut uniquement être prête
+        if (ancienStatut == StatutCommande.EN_PREPARATION && nouveauStatut != StatutCommande.PRETE) {
+
+            throw new CommandeTransitionException("Transition de statut impossible : "
+                            + ancienStatut + " → " + nouveauStatut
+            );
+        }
+
+        // Une commande prête peut uniquement être livrée
+        if (ancienStatut == StatutCommande.PRETE && nouveauStatut != StatutCommande.LIVREE) {
+
+            throw new CommandeTransitionException("Transition de statut impossible : "
+                            + ancienStatut + " → " + nouveauStatut
+            );
+        }
     }
 
     //modifier le statut d'une commande
@@ -207,9 +296,12 @@ public class CommandeService {
 
     //Annuler une commande
     @Transactional
-    public CommandeResponse annulerCommande(Long id) {
+    public CommandeResponse annulerCommande(Long id,Authentication authentication) {
         //chercher la commande
         Commande commandeExistant = trouverCommandeOuLeverException(id);
+
+        //Vérifier l'accés
+        verifierAccesCommande(commandeExistant,authentication);
 
         //Vérifier s'il peut etre annuler
         verifierTransitionStatut(commandeExistant.getStatut(),StatutCommande.ANNULEE);

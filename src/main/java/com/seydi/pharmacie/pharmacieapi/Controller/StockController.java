@@ -5,6 +5,8 @@ import com.seydi.pharmacie.pharmacieapi.dto.request.CreateStockRequest;
 import com.seydi.pharmacie.pharmacieapi.dto.request.UpdateStockRequest;
 import com.seydi.pharmacie.pharmacieapi.dto.response.StockResponse;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,8 +30,11 @@ public class StockController {
 
     //Ajout de stock
     @PostMapping
-    public StockResponse ajouterStock(@Valid @RequestBody CreateStockRequest request){
-        return stockService.ajouterStock(request);
+    public ResponseEntity<StockResponse> ajouterStock(@Valid @RequestBody CreateStockRequest request){
+        StockResponse stockResponse = stockService.ajouterStock(request);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(stockResponse);
     }
 
     //Chercher stock
@@ -46,7 +51,10 @@ public class StockController {
 
     //supprimer stock
     @DeleteMapping("/{id}")
-    public void supprimerStock(@PathVariable Long id){
+    public ResponseEntity<Void> supprimerStock(@PathVariable Long id){
+
         stockService.supprimerStock(id);
+
+        return ResponseEntity.noContent().build();
     }
 }

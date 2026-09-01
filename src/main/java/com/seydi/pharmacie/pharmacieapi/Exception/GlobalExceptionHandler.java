@@ -204,6 +204,38 @@ public class GlobalExceptionHandler {
         );
     }
 
+    //Si le client a des commandes qui lui sont encore associé
+    @ExceptionHandler(ClientHasCommandesException.class)
+    public ResponseEntity<ApiError> gererClientAvecCommandes(ClientHasCommandesException ex){
+
+        ApiError erreur = new ApiError(
+                ex.getMessage(),
+                HttpStatus.CONFLICT.value(),
+                LocalDateTime.now()
+        );
+
+        return new ResponseEntity<>(
+                erreur,
+                HttpStatus.CONFLICT
+        );
+    }
+
+    //Si le produit est ajouter 2 fois dans la mm commande
+    @ExceptionHandler(ProduitDejaDansCommandeException.class)
+    public ResponseEntity<ApiError> gererProduitDejaDansCommande(ProduitDejaDansCommandeException ex) {
+
+        ApiError erreur = new ApiError(
+                ex.getMessage(),
+                HttpStatus.CONFLICT.value(),
+                LocalDateTime.now()
+        );
+
+        return new ResponseEntity<>(
+                erreur,
+                HttpStatus.CONFLICT
+        );
+    }
+
     //Erreur métier si le produit possède encore un stock
     @ExceptionHandler(ProduitHasStockException.class)
     public ResponseEntity<ApiError> gererProduitAvecStock(ProduitHasStockException ex){

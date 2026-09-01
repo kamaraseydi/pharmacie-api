@@ -27,6 +27,9 @@ public class Client {
     @OneToMany(mappedBy = "client")
     private List<Commande> commandes = new ArrayList<>();
 
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
     public Client() {}
 
     public Client(Long id, String nom, String email, String motDePasse, String telephone, String adresse) {
@@ -92,6 +95,14 @@ public class Client {
 
     public void setCommandes(List<Commande> commandes) {
         this.commandes = commandes;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     @Override

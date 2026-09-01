@@ -5,6 +5,8 @@ import com.seydi.pharmacie.pharmacieapi.dto.request.CreateFournisseurRequest;
 import com.seydi.pharmacie.pharmacieapi.dto.request.UpdateFournisseurRequest;
 import com.seydi.pharmacie.pharmacieapi.dto.response.FournisseurResponse;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,8 +23,11 @@ public class FournisseurController {
 
     //Ajouter fournisseur
     @PostMapping()
-    public FournisseurResponse ajouterFournisseur(@Valid @RequestBody CreateFournisseurRequest request){
-        return fournisseurService.ajouterFournisseur(request);
+    public ResponseEntity<FournisseurResponse> ajouterFournisseur(@Valid @RequestBody CreateFournisseurRequest request){
+        FournisseurResponse fournisseurResponse = fournisseurService.ajouterFournisseur(request);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(fournisseurResponse);
     }
 
     //lister les fournisseurs
@@ -45,7 +50,9 @@ public class FournisseurController {
 
     //supprimer fournisseur
     @DeleteMapping("/{id}")
-    public void supprimerFournisseur(@PathVariable Long id){
+    public ResponseEntity<Void> supprimerFournisseur(@PathVariable Long id){
         fournisseurService.supprimerFournisseur(id);
+
+        return ResponseEntity.noContent().build();
     }
 }
