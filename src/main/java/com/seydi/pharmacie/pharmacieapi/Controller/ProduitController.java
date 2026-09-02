@@ -5,6 +5,8 @@ import com.seydi.pharmacie.pharmacieapi.dto.request.CreateProduitRequest;
 import com.seydi.pharmacie.pharmacieapi.dto.request.UpdateProduitRequest;
 import com.seydi.pharmacie.pharmacieapi.dto.response.ProduitResponse;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,8 +29,11 @@ public class ProduitController {
 
     //Ajout d'un produit
     @PostMapping
-    public ProduitResponse ajouterProduit(@Valid @RequestBody CreateProduitRequest request){
-        return produitService.ajouterProduit(request);
+    public ResponseEntity<ProduitResponse> ajouterProduit(@Valid @RequestBody CreateProduitRequest request){
+        ProduitResponse produitResponse = produitService.ajouterProduit(request);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(produitResponse);
     }
 
     //Chercher un produit par son id
@@ -45,8 +50,11 @@ public class ProduitController {
 
     //Supprimer Produit
     @DeleteMapping("/{id}")
-    public void supprimerProduit(@PathVariable Long id){
+    public ResponseEntity<Void> supprimerProduit(@PathVariable Long id){
+
         produitService.supprimerProduit(id);
+
+        return ResponseEntity.noContent().build();
     }
 
 }

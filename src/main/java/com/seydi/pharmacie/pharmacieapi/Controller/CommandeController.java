@@ -5,6 +5,10 @@ import com.seydi.pharmacie.pharmacieapi.dto.request.CreateCommandeRequest;
 import com.seydi.pharmacie.pharmacieapi.dto.request.UpdateStatutCommandeRequest;
 import com.seydi.pharmacie.pharmacieapi.dto.response.CommandeResponse;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,20 +25,23 @@ public class CommandeController {
 
     //Ajouter une commande
     @PostMapping
-    public CommandeResponse ajouterCommande(@Valid @RequestBody CreateCommandeRequest request){
-        return commandeService.ajouterCommande(request);
+    public ResponseEntity<CommandeResponse> ajouterCommande(@Valid @RequestBody CreateCommandeRequest request, Authentication authentication){
+        CommandeResponse commandeResponse = commandeService.ajouterCommande(request,authentication);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(commandeResponse);
     }
 
     //Lister les commandes
     @GetMapping
-    public List<CommandeResponse> listerCommandes(){
-        return commandeService.listerCommandes();
+    public List<CommandeResponse> listerCommandes(Authentication authentication){
+        return commandeService.listerCommandes(authentication);
     }
 
     //Chercher commande par Id
     @GetMapping("/{id}")
-    public CommandeResponse chercherCommandeParId(@PathVariable Long id){
-        return commandeService.chercherCommandeParId(id);
+    public CommandeResponse chercherCommandeParId(@PathVariable Long id, Authentication authentication) throws AccessDeniedException {
+        return commandeService.chercherCommandeParId(id,authentication);
     }
 
 
@@ -46,7 +53,7 @@ public class CommandeController {
 
     //Annuler une commande
     @PutMapping("/{id}/annuler")
-    public CommandeResponse annulerCommande(@PathVariable Long id){
-        return commandeService.annulerCommande(id);
+    public CommandeResponse annulerCommande(@PathVariable Long id, Authentication authentication){
+        return commandeService.annulerCommande(id, authentication);
     }
 }

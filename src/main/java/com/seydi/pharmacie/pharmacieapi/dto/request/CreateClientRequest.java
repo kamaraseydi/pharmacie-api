@@ -82,12 +82,13 @@ public class CreateClientRequest {
         this.adresse = adresse;
     }
 
+    //Il faut qu'on retire le mot de passe du toString(). Même si on le hash ensuite,
+    // le DTO contient le mot de passe en clair pendant la requête et il ne faut pas risquer de le retrouver dans les logs.
     @Override
     public String toString() {
         return "CreateClientRequest{" +
                 "nom='" + nom + '\'' +
                 ", email='" + email + '\'' +
-                ", motDePasse='" + motDePasse + '\'' +
                 ", telephone='" + telephone + '\'' +
                 ", adresse='" + adresse + '\'' +
                 '}';
