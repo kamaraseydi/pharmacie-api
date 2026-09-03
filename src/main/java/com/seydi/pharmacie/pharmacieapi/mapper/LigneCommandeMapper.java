@@ -1,6 +1,6 @@
 package com.seydi.pharmacie.pharmacieapi.mapper;
 
-import com.seydi.pharmacie.pharmacieapi.Model.LigneCommande;
+import com.seydi.pharmacie.pharmacieapi.model.LigneCommande;
 import com.seydi.pharmacie.pharmacieapi.dto.request.CreateLigneCommandeRequest;
 import com.seydi.pharmacie.pharmacieapi.dto.response.LigneCommandeResponse;
 import org.springframework.stereotype.Component;

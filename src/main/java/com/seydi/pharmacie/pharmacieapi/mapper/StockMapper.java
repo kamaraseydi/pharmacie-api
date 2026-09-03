@@ -1,6 +1,6 @@
 package com.seydi.pharmacie.pharmacieapi.mapper;
 
-import com.seydi.pharmacie.pharmacieapi.Model.Stock;
+import com.seydi.pharmacie.pharmacieapi.model.Stock;
 import com.seydi.pharmacie.pharmacieapi.dto.request.CreateStockRequest;
 import com.seydi.pharmacie.pharmacieapi.dto.request.UpdateStockRequest;
 import com.seydi.pharmacie.pharmacieapi.dto.response.StockResponse;

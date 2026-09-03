@@ -1,8 +1,8 @@
 package com.seydi.pharmacie.pharmacieapi.config;
 
-import com.seydi.pharmacie.pharmacieapi.Model.Client;
-import com.seydi.pharmacie.pharmacieapi.Model.Role;
-import com.seydi.pharmacie.pharmacieapi.Repository.ClientRepository;
+import com.seydi.pharmacie.pharmacieapi.model.Client;
+import com.seydi.pharmacie.pharmacieapi.model.Role;
+import com.seydi.pharmacie.pharmacieapi.repository.ClientRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

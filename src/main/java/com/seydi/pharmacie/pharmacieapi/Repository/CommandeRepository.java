@@ -1,6 +1,6 @@
-package com.seydi.pharmacie.pharmacieapi.Repository;
+package com.seydi.pharmacie.pharmacieapi.repository;
 
-import com.seydi.pharmacie.pharmacieapi.Model.Commande;
+import com.seydi.pharmacie.pharmacieapi.model.Commande;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

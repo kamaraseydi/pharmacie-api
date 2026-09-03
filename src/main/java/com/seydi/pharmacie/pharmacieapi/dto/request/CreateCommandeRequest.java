@@ -1,13 +1,16 @@
 package com.seydi.pharmacie.pharmacieapi.dto.request;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
 public class CreateCommandeRequest {
 
     @NotEmpty(message = "La commande doit contenir au moins un produit")
+    @Schema(
+            description = "Liste des produits à commander"
+    )
     private List<CreateLigneCommandeRequest> lignes;
 
     public CreateCommandeRequest() {}

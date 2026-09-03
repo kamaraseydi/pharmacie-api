@@ -1,10 +1,10 @@
-package com.seydi.pharmacie.pharmacieapi.Service;
+package com.seydi.pharmacie.pharmacieapi.service;
 
-import com.seydi.pharmacie.pharmacieapi.Exception.FournisseurAlreadyExistsException;
-import com.seydi.pharmacie.pharmacieapi.Exception.FournisseurHasProductsException;
-import com.seydi.pharmacie.pharmacieapi.Exception.FournisseurNotFoundException;
-import com.seydi.pharmacie.pharmacieapi.Model.Fournisseur;
-import com.seydi.pharmacie.pharmacieapi.Repository.FournisseurRepository;
+import com.seydi.pharmacie.pharmacieapi.exception.FournisseurAlreadyExistsException;
+import com.seydi.pharmacie.pharmacieapi.exception.FournisseurHasProductsException;
+import com.seydi.pharmacie.pharmacieapi.exception.FournisseurNotFoundException;
+import com.seydi.pharmacie.pharmacieapi.model.Fournisseur;
+import com.seydi.pharmacie.pharmacieapi.repository.FournisseurRepository;
 import com.seydi.pharmacie.pharmacieapi.dto.request.CreateFournisseurRequest;
 import com.seydi.pharmacie.pharmacieapi.dto.request.UpdateFournisseurRequest;
 import com.seydi.pharmacie.pharmacieapi.dto.response.FournisseurResponse;

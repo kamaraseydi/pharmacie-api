@@ -1,5 +1,6 @@
 package com.seydi.pharmacie.pharmacieapi.dto.request;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -11,14 +12,26 @@ public class CreateClientRequest {
 
     @NotBlank(message = "Nom obligatoire")
     @Size(min = 2,max = 50,message = "Le nom doit contenir au moins 2 caractéres")
+    @Schema(
+            description = "Nom complet du client",
+            example = "Mamadou Diop"
+    )
     private String nom;
 
     @NotBlank(message = "Email obligatoire")
     @Email(message = "Email Invalide")
+    @Schema(
+            description = "Adresse email du client",
+            example = "mamadou.diop@gmail.com"
+    )
     private String email;
 
     @NotBlank(message = "Mot de passe obligatoire")
     @Size(min = 8,max = 100,message = "Le mot de passe doit contenir au moins 8 caractères")
+    @Schema(
+            description = "Mot de passe du compte, au minimum 8 caractères",
+            example = "********"
+    )
     private String motDePasse;
 
     @NotBlank(message = "Telephone obligatoire")
@@ -26,10 +39,18 @@ public class CreateClientRequest {
             regexp = "^(70|75|76|77|78)[0-9]{7}$",
             message = "Numéro de téléphone sénégalais invalide."
     )
+    @Schema(
+            description = "Numéro de téléphone sénégalais",
+            example = "771234567"
+    )
     private String telephone;
 
     @NotBlank(message = "Adresse obligatoire")
     @Size(min = 4, message = "Adresse doit contenir au moins 4 caractéres")
+    @Schema(
+            description = "Adresse du client",
+            example = "Dakar, Sénégal"
+    )
     private String adresse;
 
     public CreateClientRequest() {}

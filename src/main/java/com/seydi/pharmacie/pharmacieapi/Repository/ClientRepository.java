@@ -1,6 +1,6 @@
-package com.seydi.pharmacie.pharmacieapi.Repository;
+package com.seydi.pharmacie.pharmacieapi.repository;
 
-import com.seydi.pharmacie.pharmacieapi.Model.Client;
+import com.seydi.pharmacie.pharmacieapi.model.Client;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

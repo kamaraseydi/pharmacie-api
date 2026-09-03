@@ -1,12 +1,12 @@
-package com.seydi.pharmacie.pharmacieapi.Service;
+package com.seydi.pharmacie.pharmacieapi.service;
 
-import com.seydi.pharmacie.pharmacieapi.Exception.ProduitNotFoundException;
-import com.seydi.pharmacie.pharmacieapi.Exception.StockAlreadyExistsException;
-import com.seydi.pharmacie.pharmacieapi.Exception.StockNotFoundException;
-import com.seydi.pharmacie.pharmacieapi.Model.Produit;
-import com.seydi.pharmacie.pharmacieapi.Model.Stock;
-import com.seydi.pharmacie.pharmacieapi.Repository.ProduitRepository;
-import com.seydi.pharmacie.pharmacieapi.Repository.StockRepository;
+import com.seydi.pharmacie.pharmacieapi.exception.ProduitNotFoundException;
+import com.seydi.pharmacie.pharmacieapi.exception.StockAlreadyExistsException;
+import com.seydi.pharmacie.pharmacieapi.exception.StockNotFoundException;
+import com.seydi.pharmacie.pharmacieapi.model.Produit;
+import com.seydi.pharmacie.pharmacieapi.model.Stock;
+import com.seydi.pharmacie.pharmacieapi.repository.ProduitRepository;
+import com.seydi.pharmacie.pharmacieapi.repository.StockRepository;
 import com.seydi.pharmacie.pharmacieapi.dto.request.CreateStockRequest;
 import com.seydi.pharmacie.pharmacieapi.dto.request.UpdateStockRequest;
 import com.seydi.pharmacie.pharmacieapi.dto.response.StockResponse;

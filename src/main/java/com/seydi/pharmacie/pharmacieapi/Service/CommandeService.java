@@ -1,11 +1,11 @@
-package com.seydi.pharmacie.pharmacieapi.Service;
+package com.seydi.pharmacie.pharmacieapi.service;
 
-import com.seydi.pharmacie.pharmacieapi.Exception.*;
-import com.seydi.pharmacie.pharmacieapi.Model.*;
-import com.seydi.pharmacie.pharmacieapi.Repository.ClientRepository;
-import com.seydi.pharmacie.pharmacieapi.Repository.CommandeRepository;
-import com.seydi.pharmacie.pharmacieapi.Repository.ProduitRepository;
-import com.seydi.pharmacie.pharmacieapi.Repository.StockRepository;
+import com.seydi.pharmacie.pharmacieapi.exception.*;
+import com.seydi.pharmacie.pharmacieapi.model.*;
+import com.seydi.pharmacie.pharmacieapi.repository.ClientRepository;
+import com.seydi.pharmacie.pharmacieapi.repository.CommandeRepository;
+import com.seydi.pharmacie.pharmacieapi.repository.ProduitRepository;
+import com.seydi.pharmacie.pharmacieapi.repository.StockRepository;
 import com.seydi.pharmacie.pharmacieapi.dto.request.CreateCommandeRequest;
 import com.seydi.pharmacie.pharmacieapi.dto.request.CreateLigneCommandeRequest;
 import com.seydi.pharmacie.pharmacieapi.dto.request.UpdateStatutCommandeRequest;

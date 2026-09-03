@@ -1,6 +1,6 @@
 package com.seydi.pharmacie.pharmacieapi.mapper;
 
-import com.seydi.pharmacie.pharmacieapi.Model.Commande;
+import com.seydi.pharmacie.pharmacieapi.model.Commande;
 import com.seydi.pharmacie.pharmacieapi.dto.request.CreateCommandeRequest;
 import com.seydi.pharmacie.pharmacieapi.dto.request.UpdateStatutCommandeRequest;
 import com.seydi.pharmacie.pharmacieapi.dto.response.CommandeResponse;
