@@ -1,4 +1,4 @@
-package com.seydi.pharmacie.pharmacieapi.Model;
+package com.seydi.pharmacie.pharmacieapi.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;

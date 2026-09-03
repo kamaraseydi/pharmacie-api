@@ -1,7 +1,7 @@
 package com.seydi.pharmacie.pharmacieapi.security;
 
-import com.seydi.pharmacie.pharmacieapi.Model.Client;
-import com.seydi.pharmacie.pharmacieapi.Repository.ClientRepository;
+import com.seydi.pharmacie.pharmacieapi.model.Client;
+import com.seydi.pharmacie.pharmacieapi.repository.ClientRepository;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

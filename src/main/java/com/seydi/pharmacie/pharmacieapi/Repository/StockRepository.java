@@ -1,6 +1,6 @@
-package com.seydi.pharmacie.pharmacieapi.Repository;
+package com.seydi.pharmacie.pharmacieapi.repository;
 
-import com.seydi.pharmacie.pharmacieapi.Model.Stock;
+import com.seydi.pharmacie.pharmacieapi.model.Stock;
 import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;

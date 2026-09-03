@@ -1,6 +1,6 @@
 package com.seydi.pharmacie.pharmacieapi.mapper;
 
-import com.seydi.pharmacie.pharmacieapi.Model.Client;
+import com.seydi.pharmacie.pharmacieapi.model.Client;
 import com.seydi.pharmacie.pharmacieapi.dto.request.CreateClientRequest;
 import com.seydi.pharmacie.pharmacieapi.dto.request.UpdateClientRequest;
 import com.seydi.pharmacie.pharmacieapi.dto.response.ClientResponse;

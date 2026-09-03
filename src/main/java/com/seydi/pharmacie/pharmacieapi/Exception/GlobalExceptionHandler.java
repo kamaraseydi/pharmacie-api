@@ -1,4 +1,4 @@
-package com.seydi.pharmacie.pharmacieapi.Exception;
+package com.seydi.pharmacie.pharmacieapi.exception;
 
 import com.seydi.pharmacie.pharmacieapi.dto.response.ApiError;
 import com.seydi.pharmacie.pharmacieapi.dto.response.ValidationErrorResponse;

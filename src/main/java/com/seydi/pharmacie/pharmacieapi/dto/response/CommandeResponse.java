@@ -1,7 +1,6 @@
 package com.seydi.pharmacie.pharmacieapi.dto.response;
 
-import com.seydi.pharmacie.pharmacieapi.Model.LigneCommande;
-import com.seydi.pharmacie.pharmacieapi.Model.StatutCommande;
+import com.seydi.pharmacie.pharmacieapi.model.StatutCommande;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

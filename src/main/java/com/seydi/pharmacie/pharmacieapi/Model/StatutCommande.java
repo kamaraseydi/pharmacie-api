@@ -1,4 +1,4 @@
-package com.seydi.pharmacie.pharmacieapi.Model;
+package com.seydi.pharmacie.pharmacieapi.model;
 
 public enum StatutCommande {
     EN_ATTENTE,

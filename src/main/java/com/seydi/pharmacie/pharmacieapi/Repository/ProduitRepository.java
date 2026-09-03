@@ -1,6 +1,6 @@
-package com.seydi.pharmacie.pharmacieapi.Repository;
+package com.seydi.pharmacie.pharmacieapi.repository;
 
-import com.seydi.pharmacie.pharmacieapi.Model.Produit;
+import com.seydi.pharmacie.pharmacieapi.model.Produit;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ProduitRepository extends JpaRepository<Produit, Long> {

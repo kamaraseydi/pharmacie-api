@@ -1,4 +1,4 @@
-package com.seydi.pharmacie.pharmacieapi.Exception;
+package com.seydi.pharmacie.pharmacieapi.exception;
 
 public class CommandeNotFoundException extends RuntimeException {
     public CommandeNotFoundException(String message) {

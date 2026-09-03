@@ -1,4 +1,4 @@
-package com.seydi.pharmacie.pharmacieapi.Exception;
+package com.seydi.pharmacie.pharmacieapi.exception;
 
 public class ProduitDejaDansCommandeException extends RuntimeException {
     public ProduitDejaDansCommandeException(String message) {

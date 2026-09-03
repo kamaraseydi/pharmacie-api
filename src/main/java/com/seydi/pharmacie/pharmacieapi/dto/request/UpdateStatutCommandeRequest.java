@@ -1,7 +1,7 @@
 package com.seydi.pharmacie.pharmacieapi.dto.request;
 
 
-import com.seydi.pharmacie.pharmacieapi.Model.StatutCommande;
+import com.seydi.pharmacie.pharmacieapi.model.StatutCommande;
 import jakarta.validation.constraints.NotNull;
 
 public class UpdateStatutCommandeRequest {

@@ -1,6 +1,6 @@
-package com.seydi.pharmacie.pharmacieapi.Repository;
+package com.seydi.pharmacie.pharmacieapi.repository;
 
-import com.seydi.pharmacie.pharmacieapi.Model.Fournisseur;
+import com.seydi.pharmacie.pharmacieapi.model.Fournisseur;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface FournisseurRepository extends JpaRepository<Fournisseur, Long> {

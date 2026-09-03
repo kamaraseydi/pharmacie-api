@@ -1,4 +1,4 @@
-package com.seydi.pharmacie.pharmacieapi.Exception;
+package com.seydi.pharmacie.pharmacieapi.exception;
 
 public class ProduitHasStockException extends RuntimeException {
     public ProduitHasStockException(String message) {

@@ -1,4 +1,4 @@
-package com.seydi.pharmacie.pharmacieapi.Exception;
+package com.seydi.pharmacie.pharmacieapi.exception;
 
 public class StockNotFoundException extends RuntimeException {
     public StockNotFoundException(String message) {

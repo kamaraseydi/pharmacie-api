@@ -119,6 +119,10 @@ public class SecurityConfig {
                         // Authentification
                         .requestMatchers("/auth").permitAll()
 
+                        // Documentation Swagger
+                        .requestMatchers("/swagger-ui/**").permitAll()
+                        .requestMatchers("/v3/api-docs/**").permitAll()
+
                         // Inscription
                         .requestMatchers(HttpMethod.POST, "/clients").permitAll()
 

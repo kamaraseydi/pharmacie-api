@@ -1,12 +1,11 @@
-package com.seydi.pharmacie.pharmacieapi.Service;
+package com.seydi.pharmacie.pharmacieapi.service;
 
-import com.seydi.pharmacie.pharmacieapi.Exception.ClientHasCommandesException;
-import com.seydi.pharmacie.pharmacieapi.Exception.ClientNotFoundException;
-import com.seydi.pharmacie.pharmacieapi.Exception.EmailAlreadyExistsException;
-import com.seydi.pharmacie.pharmacieapi.Model.Client;
-import com.seydi.pharmacie.pharmacieapi.Model.Commande;
-import com.seydi.pharmacie.pharmacieapi.Model.Role;
-import com.seydi.pharmacie.pharmacieapi.Repository.ClientRepository;
+import com.seydi.pharmacie.pharmacieapi.exception.ClientHasCommandesException;
+import com.seydi.pharmacie.pharmacieapi.exception.ClientNotFoundException;
+import com.seydi.pharmacie.pharmacieapi.exception.EmailAlreadyExistsException;
+import com.seydi.pharmacie.pharmacieapi.model.Client;
+import com.seydi.pharmacie.pharmacieapi.model.Role;
+import com.seydi.pharmacie.pharmacieapi.repository.ClientRepository;
 import com.seydi.pharmacie.pharmacieapi.dto.request.CreateClientRequest;
 import com.seydi.pharmacie.pharmacieapi.dto.request.UpdateClientRequest;
 import com.seydi.pharmacie.pharmacieapi.dto.response.ClientResponse;

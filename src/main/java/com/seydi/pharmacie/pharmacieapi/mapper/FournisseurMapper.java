@@ -1,6 +1,6 @@
 package com.seydi.pharmacie.pharmacieapi.mapper;
 
-import com.seydi.pharmacie.pharmacieapi.Model.Fournisseur;
+import com.seydi.pharmacie.pharmacieapi.model.Fournisseur;
 import com.seydi.pharmacie.pharmacieapi.dto.request.CreateFournisseurRequest;
 import com.seydi.pharmacie.pharmacieapi.dto.request.UpdateFournisseurRequest;
 import com.seydi.pharmacie.pharmacieapi.dto.response.FournisseurResponse;
