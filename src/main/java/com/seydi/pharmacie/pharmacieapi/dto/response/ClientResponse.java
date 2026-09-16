@@ -1,5 +1,8 @@
 package com.seydi.pharmacie.pharmacieapi.dto.response;
 
+
+import java.time.LocalDate;
+
 public class ClientResponse {
 
     //Un Response DTO contient uniquement les informations que le serveur souhaite renvoyer au client.
@@ -8,17 +11,19 @@ public class ClientResponse {
     private String email;
     private String telephone;
     private String adresse;
+    private LocalDate dateNaissance;
 
     public ClientResponse() {
 
     }
 
-    public ClientResponse(Long id, String nom, String email, String telephone, String adresse) {
+    public ClientResponse(Long id, String nom, String email, String telephone, String adresse, LocalDate dateNaissance) {
         this.id = id;
         this.nom = nom;
         this.email = email;
         this.telephone = telephone;
         this.adresse = adresse;
+        this.dateNaissance = dateNaissance;
     }
 
     public Long getId() {
@@ -61,6 +66,14 @@ public class ClientResponse {
         this.adresse = adresse;
     }
 
+    public LocalDate getDateNaissance() {
+        return dateNaissance;
+    }
+
+    public void setDateNaissance(LocalDate dateNaissance) {
+        this.dateNaissance = dateNaissance;
+    }
+
     @Override
     public String toString() {
         return "ClientResponse{" +
@@ -69,6 +82,7 @@ public class ClientResponse {
                 ", email='" + email + '\'' +
                 ", telephone='" + telephone + '\'' +
                 ", adresse='" + adresse + '\'' +
+                ", dateNaissance=" + dateNaissance +
                 '}';
     }
 }

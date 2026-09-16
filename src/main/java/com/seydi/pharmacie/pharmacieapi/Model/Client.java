@@ -108,12 +108,26 @@ public class Client {
         this.role = role;
     }
 
+    public LocalDate getDateNaissance() {
+        return dateNaissance;
+    }
+
+    public void setDateNaissance(LocalDate dateNaissance) {
+        this.dateNaissance = dateNaissance;
+    }
+
     @Override
     public String toString() {
         return "Client{" +
                 "id=" + id +
                 ", nom='" + nom + '\'' +
                 ", email='" + email + '\'' +
+                ", telephone='" + telephone + '\'' +
+                ", adresse='" + adresse + '\'' +
+                ", commandes=" + commandes +
+                ", role=" + role +
+                ", dateNaissance=" + dateNaissance +
                 '}';
     }
+
 }

@@ -1,10 +1,9 @@
 package com.seydi.pharmacie.pharmacieapi.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
+
+import java.time.LocalDate;
 
 public class CreateClientRequest {
 
@@ -53,14 +52,18 @@ public class CreateClientRequest {
     )
     private String adresse;
 
+    @Past(message = "La date de naissance doit être dans le passé")
+    private LocalDate dateNaissance;
+
     public CreateClientRequest() {}
 
-    public CreateClientRequest(String nom, String email, String motDePasse, String telephone, String adresse) {
+    public CreateClientRequest(String nom, String email, String motDePasse, String telephone, String adresse, LocalDate dateNaissance) {
         this.nom = nom;
         this.email = email;
         this.motDePasse = motDePasse;
         this.telephone = telephone;
         this.adresse = adresse;
+        this.dateNaissance = dateNaissance;
     }
 
     public String getNom() {
@@ -103,8 +106,17 @@ public class CreateClientRequest {
         this.adresse = adresse;
     }
 
+    public LocalDate getDateNaissance() {
+        return dateNaissance;
+    }
+
+    public void setDateNaissance(LocalDate dateNaissance) {
+        this.dateNaissance = dateNaissance;
+    }
+
     //Il faut qu'on retire le mot de passe du toString(). Même si on le hash ensuite,
     // le DTO contient le mot de passe en clair pendant la requête et il ne faut pas risquer de le retrouver dans les logs.
+
     @Override
     public String toString() {
         return "CreateClientRequest{" +
@@ -112,6 +124,7 @@ public class CreateClientRequest {
                 ", email='" + email + '\'' +
                 ", telephone='" + telephone + '\'' +
                 ", adresse='" + adresse + '\'' +
+                ", dateNaissance=" + dateNaissance +
                 '}';
     }
 }
