@@ -18,6 +18,7 @@ public class ClientMapper {
         client.setMotDePasse(request.getMotDePasse());
         client.setTelephone(request.getTelephone());
         client.setAdresse(request.getAdresse());
+        client.setDateNaissance(request.getDateNaissance());
 
         return client;
     }
@@ -31,6 +32,7 @@ public class ClientMapper {
         response.setEmail(client.getEmail());
         response.setTelephone(client.getTelephone());
         response.setAdresse(client.getAdresse());
+        response.setDateNaissance(client.getDateNaissance());
 
         return response;
     }
@@ -44,6 +46,7 @@ public class ClientMapper {
         client.setEmail(request.getEmail());
         client.setTelephone(request.getTelephone());
         client.setAdresse(request.getAdresse());
+        client.setDateNaissance(request.getDateNaissance());
 
     }
 
