@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +30,8 @@ public class Client {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    private LocalDate dateNaissance;
 
     public Client() {}
 
